@@ -3,7 +3,6 @@ import logo from "./logo.svg";
 import { useEffect, useState } from "react";
 import { blue, cyan, presetPrimaryColors } from "@ant-design/colors";
 import { Layout, Input, Typography, Row, message } from "antd";
-import { Link } from "react-router-dom";
 import CharCard from "./Components/CharCard";
 import { useCharactersContext } from "./context/characters-context";
 
@@ -58,11 +57,22 @@ function App() {
       <div className="App">
         {contextHolder}
         <Layout>
-          <Header style={{ height: 90, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} className="header">
+          <Header
+            style={{
+              height: 90,
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+            className="header"
+          >
             <Title level={2} style={{ color: presetPrimaryColors.volcano }}>
               Starwars Character Cards
             </Title>
-            <Title level={4} style={{color: presetPrimaryColors.volcano}}> Search for your character and collect a card</Title>
+            <Title level={4} style={{ color: presetPrimaryColors.volcano }}>
+              {" "}
+              Search for your character and collect a card
+            </Title>
           </Header>
           <Content style={{ padding: 20 }}>
             <Search

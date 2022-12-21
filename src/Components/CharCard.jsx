@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Card, Col, Button, Space, message } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
 import { useCharactersContext } from "../context/characters-context";
+import { Link } from "react-router-dom";
 
 const { Meta } = Card;
 
@@ -14,7 +15,6 @@ const CharCard = (props) => {
 
   const onDelete = (e) => {
     e.preventDefault();
-    console.log("e.currentTarget.id", e.currentTarget.id);
     let i = characters.indexOf(character);
     characters.splice(i, 1);
     setCharacters(characters);
@@ -40,9 +40,9 @@ const CharCard = (props) => {
         <Meta title={character?.name} description={character?.species} />
         <Space direction="horizontal" style={{ width: "100%", paddingTop: 10, display: 'flex', justifyContent: 'space-between', }}>
           <Button type="primary" style={{ width: "100%" }}>
-            {/* <Link to="/CharPage" state={character}> */}
+            <Link to="/CharPage" state={character} style={{textDecoration: 'none', color: 'white'}}>
             More Details
-            {/* </Link> */}
+            </Link>
           </Button>
           <Button
             type="primary"
