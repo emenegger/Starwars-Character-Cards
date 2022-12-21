@@ -15,11 +15,20 @@ function App() {
 
   const [characters, setCharacters] = useCharactersContext([]);
 
+  // const [cards, setCards] = useState(characters?.map((character, i) => (
+  //   <CharCard character={character} key={character.name + i} />
+  // )));
+
+  // useEffect(()=>{
+  //   setCards()
+  // },[characters])
+
   const onSearch = (input) => {
     console.log("input", input);
     fetch("https://akabab.github.io/starwars-api/api/all.json")
       .then((response) => response.json())
       .then((data) => {
+        console.log("data from api:", data);
         messageApi.open({
           type: "loading",
           content: "Loading",

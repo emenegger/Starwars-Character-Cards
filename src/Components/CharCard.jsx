@@ -10,15 +10,14 @@ const { Meta } = Card;
 
 const CharCard = (props) => {
   const [characters, setCharacters] = useCharactersContext([]);
-  const [deleteCard, setDeleteCard] = useState(false)
-  const [messageApi, contextHolder] = message.useMessage(); //** fix this later
+  const [messageApi, contextHolder] = message.useMessage();
 
   const onDelete = (e) => {
     e.preventDefault();
-    let i = characters.indexOf(character);
-    characters.splice(i, 1);
-    setCharacters(characters);
-    // setDeleteCard(true);
+    // let i = characters.indexOf(character); //* Why doesn't this method work?
+    // characters.splice(i, 1);
+    // setCharacters(characters);
+    setCharacters(characters.filter(ele => ele !== character));
     messageApi.destroy();
     messageApi.open({
       type: "warning",
@@ -37,7 +36,7 @@ const CharCard = (props) => {
         // style={{ width: 240 }}
         cover={<img alt={character?.name} src={character?.image} />}
       >
-        <Meta title={character?.name} description={character?.species} />
+        <Meta title={character?.name} description={character?.species[0].toUpperCase() + character?.species.slice(1)} />
         <Space direction="horizontal" style={{ width: "100%", paddingTop: 10, display: 'flex', justifyContent: 'space-between', }}>
           <Button type="primary" style={{ width: "100%" }}>
             <Link to="/CharPage" state={character} style={{textDecoration: 'none', color: 'white'}}>

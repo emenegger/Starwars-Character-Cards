@@ -67,7 +67,7 @@ const CharPage = (props) => {
                 >
                   {descriptionItems}
                   <Descriptions.Item label="Masters">
-                    {state.masters ? (
+                    {state.masters && Array.isArray(state.masters) ? (
                       state.masters.map((master, i) => (
                         <p key={master + i}>{master}</p>
                       ))
