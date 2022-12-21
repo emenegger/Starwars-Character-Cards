@@ -31,13 +31,14 @@ const CharCard = (props) => {
   const { character } = props;
   return (
     <Col className="gutter-row" span={6}>
+      {contextHolder}
       <Card
         hoverable
         // style={{ width: 240 }}
         cover={<img alt={character?.name} src={character?.image} />}
       >
         <Meta title={character?.name} description={character?.species} />
-        <Space direction="horizontal" style={{ width: "100%", paddingTop: 10 }}>
+        <Space direction="horizontal" style={{ width: "100%", paddingTop: 10, display: 'flex', justifyContent: 'space-between', }}>
           <Button type="primary" style={{ width: "100%" }}>
             {/* <Link to="/CharPage" state={character}> */}
             More Details
@@ -50,7 +51,6 @@ const CharCard = (props) => {
             icon={<CloseOutlined />}
             onClick={onDelete}
           />
-          {contextHolder}
         </Space>
       </Card>
     </Col>
