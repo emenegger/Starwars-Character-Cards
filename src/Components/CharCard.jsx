@@ -14,10 +14,12 @@ const CharCard = (props) => {
 
   const onDelete = (e) => {
     e.preventDefault();
-    // let i = characters.indexOf(character); //* Why doesn't this method work?
+    setCharacters(characters.filter(ele => ele !== character));
+    console.log('filtered characters:', characters);
+    // let i = characters.indexOf(character); 
     // characters.splice(i, 1);
     // setCharacters(characters);
-    setCharacters(characters.filter(ele => ele !== character));
+    // console.log('spliced characters',characters)
     messageApi.destroy();
     messageApi.open({
       type: "warning",

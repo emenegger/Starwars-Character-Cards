@@ -5,6 +5,8 @@ import { blue, cyan, presetPrimaryColors } from "@ant-design/colors";
 import { Layout, Input, Typography, Row, message } from "antd";
 import CharCard from "./Components/CharCard";
 import { useCharactersContext } from "./context/characters-context";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 
 const { Sider, Header, Content } = Layout;
 const { Title, Text } = Typography;
@@ -15,46 +17,65 @@ function App() {
 
   const [characters, setCharacters] = useCharactersContext([]);
 
-  // const [cards, setCards] = useState(characters?.map((character, i) => (
-  //   <CharCard character={character} key={character.name + i} />
-  // )));
+  const chars = useSelector(state => state.characters);
+  console.log('chars', chars);
+  const dispatch = useDispatch();
 
-  // useEffect(()=>{
-  //   setCards()
-  // },[characters])
-
-  const onSearch = (input) => {
+  const onSearch = async (input) => {
     console.log("input", input);
-    fetch("https://akabab.github.io/starwars-api/api/all.json")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("data from api:", data);
-        messageApi.open({
-          type: "loading",
-          content: "Loading",
-          duration: 0,
-        });
-        // console.log(data);
-        const inputChar = data.find((ele) => ele.name === input);
-        if (inputChar) {
-          setCharacters((arr) => [
-            ...arr,
-            data.find((ele) => ele.name === input),
-          ]);
-          messageApi.destroy();
-          messageApi.open({
-            type: "success",
-            content: "Added!",
-          });
-        } else {
-          messageApi.destroy();
-          messageApi.open({
-            type: "error",
-            content: "There is no character with that name. Please try again.",
-          });
-        }
-      })
-      .catch((err) => console.log("err", err));
+    dispatch({type: 'addCharacters'});
+
+    const result = await axios.get(
+      "https://akabab.github.io/starwars-api/api/all.json"
+    );
+    const { data } = result;
+    console.log(data);
+    const inputChar = data.find((ele) => ele.name === input);
+    if (inputChar) {
+      setCharacters((arr) => [...arr, data.find((ele) => ele.name === input)]);
+      messageApi.destroy();
+      messageApi.open({
+        type: "success",
+        content: "Added!",
+      });
+    } else {
+      messageApi.destroy();
+      messageApi.open({
+        type: "error",
+        content: "There is no character with that name. Please try again.",
+      });
+    }
+
+    //   fetch("https://akabab.github.io/starwars-api/api/all.json")
+    //     .then((response) => response.json())
+    //     .then((data) => {
+    //       messageApi.open({
+    //         type: "loading",
+    //         content: "Loading",
+    //         duration: 0,
+    //       });
+    //       // console.log("data from api:", data);
+    //       const inputChar = data.find((ele) => ele.name === input);
+    //       if (inputChar) {
+    //         setCharacters((arr) => [
+    //           ...arr,
+    //           data.find((ele) => ele.name === input),
+    //         ]);
+    //         // console.log('characters after input',characters)
+    //         messageApi.destroy();
+    //         messageApi.open({
+    //           type: "success",
+    //           content: "Added!",
+    //         });
+    //       } else {
+    //         messageApi.destroy();
+    //         messageApi.open({
+    //           type: "error",
+    //           content: "There is no character with that name. Please try again.",
+    //         });
+    //       }
+    //     })
+    //     .catch((err) => console.log("err", err));
   };
 
   let cards = characters?.map((character, i) => (

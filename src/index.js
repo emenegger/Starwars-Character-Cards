@@ -6,18 +6,22 @@ import CharPage from "./Components/CharPage";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { CharactersProvider } from "./context/characters-context";
+import { Provider } from "react-redux";
+import store from "../src/store/index";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <CharactersProvider>
-      <Router>
-        <Routes>
-          <Route path={"/"} element={<App />} />
-          <Route path={"/charPage"} element={<CharPage />} />
-        </Routes>
-      </Router>
-    </CharactersProvider>
+    <Provider store={store}>
+      <CharactersProvider>
+        <Router>
+          <Routes>
+            <Route path={"/"} element={<App />} />
+            <Route path={"/charPage"} element={<CharPage />} />
+          </Routes>
+        </Router>
+      </CharactersProvider>
+    </Provider>
   </React.StrictMode>
 );
 
