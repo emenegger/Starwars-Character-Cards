@@ -1,12 +1,12 @@
-import logo from "./logo.svg";
 // import "./App.css";
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 import { blue, cyan, presetPrimaryColors } from "@ant-design/colors";
 import { Layout, Input, Typography, Row, message } from "antd";
 import CharCard from "./Components/CharCard";
 import { useCharactersContext } from "./context/characters-context";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
+import { characterActions } from "./store/index";
 
 const { Sider, Header, Content } = Layout;
 const { Title, Text } = Typography;
@@ -17,7 +17,7 @@ function App() {
 
   const [characters, setCharacters] = useCharactersContext([]);
 
-  const chars = useSelector((state) => state.characters);
+  const chars = useSelector(state => state.characters);
 
   const dispatch = useDispatch();
 
@@ -32,8 +32,9 @@ function App() {
     const inputChar = data.find((ele) => ele.name === input);
     if (inputChar) {
       setCharacters((arr) => [...arr, data.find((ele) => ele.name === input)]);
-      dispatch({ type: "addCharacters", addedChar: inputChar });
-      console.log('chars', chars)
+      // dispatch({ type: "addCharacters", addedChar: inputChar });
+      dispatch(characterActions.addCharacter(inputChar));
+      console.log('chars from redux', chars)
       messageApi.destroy();
       messageApi.open({
         type: "success",
@@ -46,37 +47,6 @@ function App() {
         content: "There is no character with that name. Please try again.",
       });
     }
-
-    //   fetch("https://akabab.github.io/starwars-api/api/all.json")
-    //     .then((response) => response.json())
-    //     .then((data) => {
-    //       messageApi.open({
-    //         type: "loading",
-    //         content: "Loading",
-    //         duration: 0,
-    //       });
-    //       // console.log("data from api:", data);
-    //       const inputChar = data.find((ele) => ele.name === input);
-    //       if (inputChar) {
-    //         setCharacters((arr) => [
-    //           ...arr,
-    //           data.find((ele) => ele.name === input),
-    //         ]);
-    //         // console.log('characters after input',characters)
-    //         messageApi.destroy();
-    //         messageApi.open({
-    //           type: "success",
-    //           content: "Added!",
-    //         });
-    //       } else {
-    //         messageApi.destroy();
-    //         messageApi.open({
-    //           type: "error",
-    //           content: "There is no character with that name. Please try again.",
-    //         });
-    //       }
-    //     })
-    //     .catch((err) => console.log("err", err));
   };
 
   let cards = chars?.map((character, i) => (

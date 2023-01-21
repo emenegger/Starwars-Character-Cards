@@ -1,10 +1,10 @@
 import React from "react";
-import { blue, cyan, presetPrimaryColors } from "@ant-design/colors";
-import { Layout, Input, Typography, Row, message } from "antd";
+import { presetPrimaryColors } from "@ant-design/colors";
+import { Layout, Typography } from "antd";
 import { Link } from "react-router-dom";
 
-const { Title, Text } = Typography;
-const { Sider, Header, Content } = Layout;
+const { Title } = Typography;
+const { Header } = Layout;
 
 const NavHeader = () => {
   return (
