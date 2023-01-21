@@ -17,13 +17,12 @@ function App() {
 
   const [characters, setCharacters] = useCharactersContext([]);
 
-  const chars = useSelector(state => state.characters);
-  console.log('chars', chars);
+  const chars = useSelector((state) => state.characters);
+
   const dispatch = useDispatch();
 
   const onSearch = async (input) => {
     console.log("input", input);
-    dispatch({type: 'addCharacters'});
 
     const result = await axios.get(
       "https://akabab.github.io/starwars-api/api/all.json"
@@ -33,6 +32,8 @@ function App() {
     const inputChar = data.find((ele) => ele.name === input);
     if (inputChar) {
       setCharacters((arr) => [...arr, data.find((ele) => ele.name === input)]);
+      dispatch({ type: "addCharacters", addedChar: inputChar });
+      console.log('chars', chars)
       messageApi.destroy();
       messageApi.open({
         type: "success",
@@ -78,7 +79,7 @@ function App() {
     //     .catch((err) => console.log("err", err));
   };
 
-  let cards = characters?.map((character, i) => (
+  let cards = chars?.map((character, i) => (
     <CharCard character={character} key={character.name + i} />
   ));
 
