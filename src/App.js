@@ -1,7 +1,7 @@
 // import "./App.css";
-// import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { blue, cyan, presetPrimaryColors } from "@ant-design/colors";
-import { Layout, Input, Typography, Row, message } from "antd";
+import { Layout, Input, Typography, Row, message, Select } from "antd";
 import CharCard from "./Components/CharCard";
 import { useCharactersContext } from "./context/characters-context";
 import axios from "axios";
@@ -17,24 +17,60 @@ function App() {
 
   const [characters, setCharacters] = useCharactersContext([]);
 
-  const chars = useSelector(state => state.characters);
+  const [swChars, setSwChars] = useState([]);
+
+  const chars = useSelector((state) => state.characters);
 
   const dispatch = useDispatch();
+  
+  useEffect(() => {
+    axios
+      .get("https://akabab.github.io/starwars-api/api/all.json")
+      .then((response) => setSwChars(response.data));
+      console.log("swChars", swChars);
+  }, []);
 
-  const onSearch = async (input) => {
-    console.log("input", input);
+  const options = swChars.map((ele) => {
+    return {
+      value: ele.name,
+      label: ele.name,
+    };
+  });
 
-    const result = await axios.get(
-      "https://akabab.github.io/starwars-api/api/all.json"
-    );
-    const { data } = result;
-    console.log(data);
-    const inputChar = data.find((ele) => ele.name === input);
+  // ** previous onSearch function
+  // const onSearch = async (input) => {
+  //   console.log("input", input);
+
+  //   const result = await axios.get(
+  //     "https://akabab.github.io/starwars-api/api/all.json"
+  //   );
+  //   const { data } = result;
+  //   console.log(data);
+  //   const inputChar = data.find((ele) => ele.name === input);
+  //   console.log(inputChar)
+  //   if (inputChar) {
+  //     setCharacters((arr) => [...arr, data.find((ele) => ele.name === input)]);
+  //     // dispatch({ type: "addCharacters", addedChar: inputChar });
+  //     dispatch(characterActions.addCharacter(inputChar));
+  //     console.log("chars from redux", chars);
+  //     messageApi.destroy();
+  //     messageApi.open({
+  //       type: "success",
+  //       content: "Added!",
+  //     });
+  //   } else {
+  //     messageApi.destroy();
+  //     messageApi.open({
+  //       type: "error",
+  //       content: "There is no character with that name. Please try again.",
+  //     });
+  //   }
+  // };
+
+  const onChange = (value) => {
+    const inputChar = swChars.find((ele) => ele.name === value);
     if (inputChar) {
-      setCharacters((arr) => [...arr, data.find((ele) => ele.name === input)]);
-      // dispatch({ type: "addCharacters", addedChar: inputChar });
       dispatch(characterActions.addCharacter(inputChar));
-      console.log('chars from redux', chars)
       messageApi.destroy();
       messageApi.open({
         type: "success",
@@ -76,14 +112,31 @@ function App() {
             </Title>
           </Header>
           <Content style={{ padding: 20 }}>
-            <Search
+            <Text>Select a character:</Text>
+            {/* <Search
               placeholder="search for your character here"
               enterButton="Search"
               onSearch={onSearch}
+            /> */}
+            <Select
+              showSearch
+              placeholder="Select a person"
+              optionFilterProp="children"
+              onChange={onChange}
+              size='large'
+              style={{minWidth: 200}}
+              // onSearch={onSelect}
+              filterOption={(input, option) =>
+                (option?.label ?? "")
+                  .toLowerCase()
+                  .includes(input.toLowerCase())
+              }
+              options={options}
             />
             <Row
               style={{ paddingTop: 20 }}
-              gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}
+              // gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}
+              gutter={{ xs: 4, sm: 8, md: 12, lg: 16 }}
             >
               {cards}
             </Row>

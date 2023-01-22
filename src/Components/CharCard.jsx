@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Card, Col, Button, Space, message } from "antd";
+import { Card, Col, Button, Space, message, Typography } from "antd";
 import { CloseOutlined, HeartTwoTone, HeartOutlined } from "@ant-design/icons";
 import { useCharactersContext } from "../context/characters-context";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { characterActions } from "../store/index";
+
+const { Paragraph, Text } = Typography;
 
 const { Meta } = Card;
 
@@ -23,33 +25,76 @@ const CharCard = (props) => {
     console.log("on like func activated. Liked is:", liked);
     e.preventDefault();
     setLiked(!liked);
-    dispatch(characterActions.likeCharacter({add: liked, character: character}))
+    dispatch(
+      characterActions.likeCharacter({ add: liked, character: character })
+    );
   };
 
   const onDelete = (e) => {
     e.preventDefault();
+    messageApi.destroy();
+    messageApi.open({
+      type: "warning",
+      content: "Deleted",
+      duration: 1000,
+    });
     // useContext
     setCharacters(characters.filter((ele) => ele !== character));
     console.log("filtered characters:", characters);
     // Redux
     const updatedChars = chars.filter((ele) => ele !== character);
     dispatch(characterActions.deleteCharacter(updatedChars));
-
-    messageApi.destroy();
-    messageApi.open({
-      type: "warning",
-      content: "Deleted",
-      duration: 0,
-    });
   };
 
   return (
-    <Col className="gutter-row" span={6}>
+    <Col
+      className="gutter-row"
+      xs={{
+        span: 22,
+        offset: 1,
+      }}
+      sm={{
+        span: 11,
+        offset: 1,
+      }}
+      lg={{
+        span: 7,
+        offset: 1,
+      }}
+      xl={{
+        span: 5,
+        offset: 1,
+      }}
+    >
       {contextHolder}
       <Card
         hoverable
-        // style={{ width: 240 }}
         cover={<img alt={character?.name} src={character?.image} />}
+        actions={[
+          <Button type="primary" style={{ width: "80%" }} size="sm">
+            <Link
+              to="/CharPage"
+              state={character}
+              style={{ textDecoration: "none", color: "white" }}
+            >
+              Details
+            </Link>
+          </Button>,
+          <Button
+            type="primary"
+            danger
+            id={character.id}
+            onClick={onDelete}
+            style={{ width: "80%" }}
+          >
+          Delete
+          </Button>,
+          liked ? (
+            <HeartTwoTone twoToneColor="#eb2f96" onClick={onLike} />
+          ) : (
+            <HeartOutlined onClick={onLike} />
+          ),
+        ]}
       >
         <Meta
           title={character?.name}
@@ -65,30 +110,7 @@ const CharCard = (props) => {
             display: "flex",
             justifyContent: "space-between",
           }}
-        >
-          <Button type="primary" style={{ width: "100%" }}>
-            <Link
-              to="/CharPage"
-              state={character}
-              style={{ textDecoration: "none", color: "white" }}
-            >
-              More Details
-            </Link>
-          </Button>
-          <Button
-            type="primary"
-            danger
-            id={character.id}
-            onClick={onDelete}
-          >
-            Delete
-          </Button>
-          {liked ? (
-            <HeartTwoTone twoToneColor="#eb2f96" onClick={onLike} />
-          ) : (
-            <HeartOutlined onClick={onLike} />
-          )}
-        </Space>
+        ></Space>
       </Card>
     </Col>
   );
