@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Card, Col, Button, Space, message, Typography } from "antd";
+import {
+  Card,
+  Col,
+  Button,
+  Space,
+  message,
+  Typography,
+  Popconfirm,
+} from "antd";
 import { CloseOutlined, HeartTwoTone, HeartOutlined } from "@ant-design/icons";
 import { useCharactersContext } from "../context/characters-context";
 import { Link } from "react-router-dom";
@@ -30,20 +38,17 @@ const CharCard = (props) => {
     );
   };
 
-  const onDelete = (e) => {
-    e.preventDefault();
-    messageApi.destroy();
-    messageApi.open({
-      type: "warning",
-      content: "Deleted",
-      duration: 1000,
-    });
-    // useContext
+  const confirm = (e) => {
+    message.success(`${character.name} deleted`);
+    // onDelete();
     setCharacters(characters.filter((ele) => ele !== character));
-    console.log("filtered characters:", characters);
     // Redux
     const updatedChars = chars.filter((ele) => ele !== character);
     dispatch(characterActions.deleteCharacter(updatedChars));
+  };
+  const cancel = (e) => {
+    console.log(e);
+    message.error('Cancelled Delete');
   };
 
   return (
@@ -84,10 +89,18 @@ const CharCard = (props) => {
             type="primary"
             danger
             id={character.id}
-            onClick={onDelete}
             style={{ width: "80%" }}
           >
-          Delete
+            <Popconfirm
+              title="Delete this card"
+              description="Are you sure you want to delete this card?"
+              onConfirm={confirm}
+              onCancel={cancel}
+              okText="Yes"
+              cancelText="No"
+            >
+              Delete
+            </Popconfirm>
           </Button>,
           liked ? (
             <HeartTwoTone twoToneColor="#eb2f96" onClick={onLike} />
