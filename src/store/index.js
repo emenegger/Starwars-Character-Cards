@@ -28,20 +28,21 @@ const charactersSlice = createSlice({
     },
     deleteCharacter(state, action) {
       state.characters = action.payload;
-      // state.characters = state.characters.filter(char => char !== action.payload);
     },
     //** this is not working currently **/
     likeCharacter(state, action) {
-      if (action.payload.add) {
-        console.log('add is truthy',action.payload);
-        state.likedChars.push(action.payload.character);
-        console.log('likedChars', typeof state.likedChars, state.likedChars);
+      const { add, character } = action.payload;
+      if (add) {
+        // state.likedChars.push(action.payload.character);
+        state.likedChars = state.likedChars.filter((c) => c.id !== character.id);
+        console.log("likedChars", typeof state.likedChars, state.likedChars);
       } else {
-        console.log('add is falsy',action.payload);
-        state.likedChars.push(action.payload.character);
-        console.log('likedChars', state.likedChars);
+        // state.likedChars.push(action.payload.character);
+        state.likedChars = [...state.likedChars, action.payload.character];
+        
+        console.log("likedChars", state.likedChars);
       }
-    }
+    },
   },
 });
 

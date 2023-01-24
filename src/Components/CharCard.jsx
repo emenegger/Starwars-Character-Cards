@@ -30,7 +30,6 @@ const CharCard = (props) => {
   const [liked, setLiked] = useState(false);
 
   const onLike = (e) => {
-    console.log("on like func activated. Liked is:", liked);
     e.preventDefault();
     setLiked(!liked);
     dispatch(
