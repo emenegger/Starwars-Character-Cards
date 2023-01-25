@@ -7,28 +7,33 @@ import { useCharactersContext } from "./context/characters-context";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { characterActions } from "./store/index";
+import useStarWars from "./hooks/useStarWars";
 
 const { Sider, Header, Content } = Layout;
 const { Title, Text } = Typography;
 const { Search } = Input;
 
 function App() {
+  // popups
   const [messageApi, contextHolder] = message.useMessage();
-
+  // use context hook method
   const [characters, setCharacters] = useCharactersContext([]);
 
-  const [swChars, setSwChars] = useState([]);
+  //custom hook
+  const { swChars } = useStarWars();
+
+  // const [swChars, setSwChars] = useState([]);
 
   const chars = useSelector((state) => state.characters);
 
   const dispatch = useDispatch();
-  
-  useEffect(() => {
+
+  /* useEffect(() => {
     axios
       .get("https://akabab.github.io/starwars-api/api/all.json")
       .then((response) => setSwChars(response.data));
       console.log("swChars", swChars);
-  }, []);
+  }, []); */
 
   const options = swChars.map((ele) => {
     return {
@@ -69,6 +74,7 @@ function App() {
 
   const onChange = (value) => {
     const inputChar = swChars.find((ele) => ele.name === value);
+    // success and failure messages
     if (inputChar) {
       dispatch(characterActions.addCharacter(inputChar));
       messageApi.destroy();
@@ -123,8 +129,8 @@ function App() {
               placeholder="Select a person"
               optionFilterProp="children"
               onChange={onChange}
-              size='large'
-              style={{minWidth: 200}}
+              size="large"
+              style={{ minWidth: 200 }}
               // onSearch={onSelect}
               filterOption={(input, option) =>
                 (option?.label ?? "")
